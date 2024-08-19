@@ -1,3 +1,13 @@
+"""
+Cette fonction permet de configurer un écrivain vidéo pour capturer des images d'une source vidéo et les enregistrer
+dans un fichier au format spécifié.
+
+Un écrivain vidéo, ou VideoWriter, est un outil qui permet de créer et d'enregistrer des vidéos à partir d'images
+(ou de frames).
+
+En d'autres termes, c'est comme une machine qui prend des photos à une certaine vitesse (images par seconde) et les
+assemble pour créer un film. Vous lui dites où sauvegarder le film, quel format utiliser, et il s'occupe du reste !
+"""
 import cv2
 
 
