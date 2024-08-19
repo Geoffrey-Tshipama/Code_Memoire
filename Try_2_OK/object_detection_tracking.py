@@ -84,8 +84,16 @@ while True:
 
         xmin, ymin, xmax, ymax = int(ltrb[0]), int(
             ltrb[1]), int(ltrb[2]), int(ltrb[3])
+
+        class_id = track.get_det_class()  # Get the class ID from the track
+        class_name = class_names[class_id]  # Get the class name from the class ID
+
         # draw the bounding box and the track id
         cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), GREEN, 2)
+        # Draw the class name above the bounding box
+        cv2.putText(frame, f"{class_name} ({track_id})", (xmin, ymin - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, GREEN, 2)
+
         cv2.rectangle(frame, (xmin, ymin - 20), (xmin + 20, ymin), GREEN, -1)
         cv2.putText(frame, str(track_id), (xmin + 5, ymin - 8),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2)  #
