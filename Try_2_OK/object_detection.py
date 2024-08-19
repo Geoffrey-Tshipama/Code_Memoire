@@ -1,3 +1,7 @@
+"""
+Ce code lit une vidéo, détecte des objets dans chaque frame à l'aide d'un modèle YOLO, dessine des rectangles autour des
+objets détectés, affiche le nombre d'images par seconde, et enregistre le résultat dans un nouveau fichier vidéo.
+"""
 import datetime
 import cv2
 from ultralytics import YOLO
