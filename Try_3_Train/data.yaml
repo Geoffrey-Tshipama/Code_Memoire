@@ -1,0 +1,9 @@
+train: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence - Weapon Detection\train\images
+val: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence - Weapon Detection\valid\images
+test: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence - Weapon Detection\test\images
+
+
+
+nc: 4
+names: ['NonViolence', 'Violence', 'guns', 'knife']
+
