@@ -13,12 +13,15 @@ if __name__ == '__main__':
 
     results = model.train(
         data="data.yaml",
-        epochs=10,
+        epochs=100,
+        patience=25,
+        batch=-1,
         imgsz=640,
-        device=0
+        cache=True,
+        device=0,
+        lr0=0.0001,
+        lrf=0.5,
+        plots=True
     )
 
-    save_dir = r"C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Trained"
-    os.makedirs(save_dir, exist_ok=True)
 
-    model.save(os.path.join(save_dir, "trained_model_1"))
