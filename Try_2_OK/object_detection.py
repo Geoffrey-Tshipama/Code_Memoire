@@ -6,16 +6,23 @@ import datetime
 import cv2
 from ultralytics import YOLO
 from helper import create_video_writer
+import pygame
 
 # define some constants
-CONFIDENCE_THRESHOLD = 0.8  # C'est prévue une conf = 0,8
+CONFIDENCE_THRESHOLD = 0.6  # C'est prévue une conf = 0,8
 GREEN = (0, 255, 0)
-# EXCLUDED_CLASS_ID = 2
+EXCLUDED_CLASS_ID = 0
+
+# Initialiser pygame pour l'audio
+pygame.mixer.init()
+
+# Charger le fichier audio
+sound = pygame.mixer.Sound('son_Alarm.wav')
 
 # initialize the video capture object
-video_cap = cv2.VideoCapture("Entrée/Fac_2_.mp4")
+video_cap = cv2.VideoCapture("Entrée/Fight/Baston.mp4")
 # initialize the video writer object
-writer = create_video_writer(video_cap, "Sortie_without_DeepSORT/Train3/output_fac_2_.mp4")
+writer = create_video_writer(video_cap, "Sortie_without_DeepSORT/Train3/output_Baston.mp4")
 
 # load the pre-trained YOLOv8n model
 model = YOLO("best.pt")
@@ -45,11 +52,15 @@ while True:
             continue
 
         # extract class ID
-        # class_id = int(data[5])
+        class_id = int(data[5])
+
+        if class_id == 1:  # 0 est l'ID de la classe "person" dans le modèle COCO
+            # Émettre le son
+            sound.play()
 
         # check if the detected class is the one to exclude
-        # if class_id == EXCLUDED_CLASS_ID:
-            # continue  # skip this detection if it's the excluded class
+        if class_id == EXCLUDED_CLASS_ID:
+            continue  # skip this detection if it's the excluded class
 
         # if the confidence is greater than the minimum confidence,
         xmin, ymin, xmax, ymax = int(data[0]), int(data[1]), int(data[2]), int(data[3])
