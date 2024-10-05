@@ -3,18 +3,23 @@ import cv2
 from deep_sort_realtime.deepsort_tracker import DeepSort
 from ultralytics import YOLO
 from helper import create_video_writer
+import pygame  # Importer pygame pour jouer le son
 
-CONFIDENCE_THRESHOLD = 0.8
+CONFIDENCE_THRESHOLD = 0.6
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
 
+# Initialiser pygame et charger le son
+pygame.mixer.init()
+sound = pygame.mixer.music.load('son.wav')  # Remplacer par le chemin du fichier son
+
 # initialize the video capture object
-video_cap = cv2.VideoCapture("2.mp4")
+video_cap = cv2.VideoCapture("Entrée/Fight/Baston.mp4")
 # initialize the video writer object
-writer = create_video_writer(video_cap, "output_deep.mp4")
+writer = create_video_writer(video_cap, "Sortie_with_DeepSORT/output_Baston")
 
 # load the pre-trained YOLOv8n model
-model = YOLO("yolov8n.pt")
+model = YOLO("best.pt")
 
 # Récupération des noms des classes
 class_names = model.names  # Cela vous donne un dictionnaire avec les IDs comme clés et les noms comme valeurs
@@ -23,7 +28,7 @@ class_names = model.names  # Cela vous donne un dictionnaire avec les IDs comme 
 # The max_age parameter in DeepSort specifies the maximum number of missed frames before an unallocated track is
 # discarded. In this example it is set to 50, which means that if an object is not detected for 50 frames its track
 # will be removed
-tracker = DeepSort(max_age=50)
+tracker = DeepSort(max_age=10)
 
 
 while True:
@@ -49,7 +54,7 @@ while True:
         # extract the confidence (i.e., probability) associated with the prediction
         confidence = data[4]
 
-        # filter out weak detections by ensuring the 
+        # filter out weak detections by ensuring the
         # confidence is greater than the minimum confidence
         if float(confidence) < CONFIDENCE_THRESHOLD:
             continue
@@ -87,6 +92,10 @@ while True:
 
         class_id = track.get_det_class()  # Get the class ID from the track
         class_name = class_names[class_id]  # Get the class name from the class ID
+
+        # Jouer un son si la classe "violence" est détectée
+        if class_name.lower() == "Violence":
+            pygame.mixer.music.play()
 
         # draw the bounding box and the track id
         cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), GREEN, 2)
