@@ -8,16 +8,17 @@ from ultralytics import YOLO
 from helper import create_video_writer
 
 # define some constants
-CONFIDENCE_THRESHOLD = 0.25 # ^c'est prévue une conf = 0,8
+CONFIDENCE_THRESHOLD = 0.8  # C'est prévue une conf = 0,8
 GREEN = (0, 255, 0)
+# EXCLUDED_CLASS_ID = 2
 
 # initialize the video capture object
-video_cap = cv2.VideoCapture("2.mp4")
+video_cap = cv2.VideoCapture("Entrée/Fac_2_.mp4")
 # initialize the video writer object
-writer = create_video_writer(video_cap, "output_5.mp4")
+writer = create_video_writer(video_cap, "Sortie_without_DeepSORT/Train3/output_fac_2_.mp4")
 
 # load the pre-trained YOLOv8n model
-model = YOLO("yolov8n.pt")
+model = YOLO("best.pt")
 
 
 while True:
@@ -43,10 +44,26 @@ while True:
         if float(confidence) < CONFIDENCE_THRESHOLD:
             continue
 
+        # extract class ID
+        # class_id = int(data[5])
+
+        # check if the detected class is the one to exclude
+        # if class_id == EXCLUDED_CLASS_ID:
+            # continue  # skip this detection if it's the excluded class
+
         # if the confidence is greater than the minimum confidence,
-        # draw the bounding box on the frame
         xmin, ymin, xmax, ymax = int(data[0]), int(data[1]), int(data[2]), int(data[3])
+        class_id = int(data[5])
+
+        # draw the bounding box on the frame
         cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), GREEN, 2)
+
+        # get the class name using the class ID
+        class_name = model.names[class_id]
+
+        # draw the class name above the bounding box
+        cv2.putText(frame, f"{class_name} ({confidence:.2f})",
+                    (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, GREEN, 2)
 
     # end time to compute the fps
     end = datetime.datetime.now()
