@@ -2,12 +2,14 @@ import cv2
 from ultralytics import YOLO
 from screeninfo import get_monitors
 import pygame
+import Recording
 
 
 # Charger le modèle YOLOv8
-model = YOLO('yolov8m.pt')  # Vous pouvez choisir un autre modèle YOLOv8 selon vos besoins
+model = YOLO('best.pt')  # Vous pouvez choisir un autre modèle YOLOv8 selon vos besoins
 
 CONFIDENCE_THRESHOLD = 0.7  # C'est prévue une conf = 0,8
+EXCLUDED_CLASS_ID = 0 # L'exclusion de la classe 0 qui détecte de personne non violente
 
 # Remplacez 'rtsp://username:password@ip_address:port/stream' par l'URL RTSP de votre caméra
 rtsp_url = 'rtsp://admin:Burotop01@10.10.50.127:554/Streaming/Channels/101'
@@ -26,6 +28,13 @@ if not cap.isOpened():
     print("Erreur : Impossible d'ouvrir le flux RTSP")
 else:
     print("Connexion réussie au flux RTSP")
+
+# Créer le dossier pour contenir les enrégistrements du jour
+dossier_create = Recording.creer_dossier_date()
+
+# Variables pour l'enregistrement vidéo
+recording = False
+out = None
 
 # Lire et afficher les images
 while cap.isOpened():
@@ -49,8 +58,10 @@ while cap.isOpened():
             if float(box.conf) < CONFIDENCE_THRESHOLD:
                 continue
 
+            if class_id == EXCLUDED_CLASS_ID:
+                continue
             # Détection que de la classe personne
-            if class_id == 0:  # 0 correspond à la classe 'person'
+            if class_id != 0:  # 0 correspond à la classe 'person'
                 # Récupérer les coordonnées de la boîte englobante
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 # Dessiner la boîte englobante et l'étiquette
@@ -62,6 +73,12 @@ while cap.isOpened():
 
     if person_detected:
         sound.play()
+        recording, out = Recording.enregistrer_video(frame, dossier_create, recording, out)
+    elif recording:  # Arrêter l'enregistrement si aucune personne n'est détectée
+        pygame.mixer.stop() # Arret du son
+        recording = False
+        out.release()
+        print("Enregistrement arrêté")
 
     # Redimensionner l'image (par exemple, à 50% de la taille originale)
     scale_percent = 50  # Pourcentage de redimensionnement
