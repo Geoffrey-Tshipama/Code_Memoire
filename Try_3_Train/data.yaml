@@ -1,9 +1,13 @@
-train: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence - Weapon Detection\train\images
-val: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence - Weapon Detection\valid\images
-test: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence - Weapon Detection\test\images
-
-
+train: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence Dectection.v1i.yolov8\train\images
+val: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence Dectection.v1i.yolov8\valid\images
+test: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence Dectection.v1i.yolov8\test\images
 
 nc: 4
-names: ['NonViolence', 'Violence', 'guns', 'knife']
+names: ['Guns', 'Knife', 'NonViolence', 'Violence']
 
+roboflow:
+  workspace: reconnaissance-des-activits-humaines
+  project: violence-dectection
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/reconnaissance-des-activits-humaines/violence-dectection/dataset/1

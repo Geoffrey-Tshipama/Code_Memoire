@@ -12,13 +12,23 @@ Evalution -1 : Nous voici presque à la fin de notre programme, maintenant, nous
 from ultralytics import YOLO
 import os
 
-if __name__ == '__main__':
-    model = YOLO("runs/detect/train3/weights/last.pt")
+if __name__ == '__m   ain__':
+    model = YOLO("yolov8s.pt")
 
     # Resume training
-    results = model.train(resume=True)
+    # results = model.train(resume=True)
 
-    # results = model.train(data="data.yaml", epochs=100, patience=25, batch=-1, imgsz=640, cache=True, device=0, lr0=0.0001, lrf=0.1, plots=True)
+    results = model.train(
+        data="data.yaml",
+        epochs=100,
+        patience=25,
+        batch=-1,
+        imgsz=640,
+        cache=True,
+        device=0,
+        lr0=0.0001,
+        lrf=0.1,
+        plots=True)
 
 
 
