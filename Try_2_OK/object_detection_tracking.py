@@ -5,21 +5,21 @@ from ultralytics import YOLO
 from helper import create_video_writer
 import pygame  # Importer pygame pour jouer le son
 
-CONFIDENCE_THRESHOLD = 0.6
+CONFIDENCE_THRESHOLD = 0.7
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
 
 # Initialiser pygame et charger le son
 pygame.mixer.init()
-sound = pygame.mixer.music.load('son.wav')  # Remplacer par le chemin du fichier son
+sound = pygame.mixer.music.load('son_Alarm.wav')  # Remplacer par le chemin du fichier son
 
 # initialize the video capture object
-video_cap = cv2.VideoCapture("Entrée/Fight/Baston.mp4")
+video_cap = cv2.VideoCapture("Données/Dataset_2024-12-05/Dataset_20-24-51.avi")
 # initialize the video writer object
-writer = create_video_writer(video_cap, "Sortie_with_DeepSORT/output_Baston")
+writer = create_video_writer(video_cap, "Sortie_with_DeepSORT/Train5/output_Dataset_20-24.mp4")
 
 # load the pre-trained YOLOv8n model
-model = YOLO("best.pt")
+model = YOLO("best_5.pt")
 
 # Récupération des noms des classes
 class_names = model.names  # Cela vous donne un dictionnaire avec les IDs comme clés et les noms comme valeurs

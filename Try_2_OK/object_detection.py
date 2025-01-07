@@ -9,7 +9,7 @@ from helper import create_video_writer
 import pygame
 
 # define some constants
-CONFIDENCE_THRESHOLD = 0.6  # C'est prévue une conf = 0,8
+CONFIDENCE_THRESHOLD = 0.5  # C'est prévue une conf = 0,8
 GREEN = (0, 255, 0)
 EXCLUDED_CLASS_ID = 0
 
@@ -20,12 +20,12 @@ pygame.mixer.init()
 sound = pygame.mixer.Sound('son_Alarm.wav')
 
 # initialize the video capture object
-video_cap = cv2.VideoCapture("Entrée/Fight/Baston.mp4")
+video_cap = cv2.VideoCapture("Données/Dataset_2024-12-05/Dataset_19-21-22.avi")
 # initialize the video writer object
-writer = create_video_writer(video_cap, "Sortie_without_DeepSORT/Train3/output_Baston.mp4")
+writer = create_video_writer(video_cap, "Sortie_without_DeepSORT/Train5/output_Dataset_19-21.mp4")
 
 # load the pre-trained YOLOv8n model
-model = YOLO("best.pt")
+model = YOLO("best_5.pt")
 
 
 while True:
