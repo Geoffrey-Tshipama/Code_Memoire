@@ -6,30 +6,30 @@ import pygame
 import Recording
 
 # Charger le modèle YOLOv8
-model = YOLO('best_14.pt')  # Vous pouvez choisir un autre modèle YOLOv8 selon vos besoins
+model = YOLO('best_5.pt')
 
-CONFIDENCE_THRESHOLD = 0.5
-# C'est prévue une conf = 0,8
-EXCLUDED_CLASS_ID = 0  # L'exclusion de la classe 0 qui détecte de personne non violente
+CONFIDENCE_THRESHOLD = 0.5  # Le seuil de détection
+# EXCLUDED_CLASS_ID = 0
+# L'exclusion de la classe 0 qui détecte de personne non violente
 
-# Remplacez 'rtsp://username:password@ip_address:port/stream' par l'URL RTSP de votre caméra
-rtsp_url = 'rtsp://admin:Burotop01@10.10.50.115:554/Streaming/Channels/101'
+# L'URL RTSP de ma caméra
+rtsp_url = 'rtsp://admin:Burotop01@10.10.50.122:554/Streaming/Channels/101'
 
 # Initialiser pygame pour l'audio
 pygame.mixer.init()
 
 # Charger le fichier audio
-sound = pygame.mixer.music.load('son_Alarm.wav')
+pygame.mixer.music.load('son_Alarm.wav')
 
 # Récupération des noms des classes
-class_names = model.names  # Cela vous donne un dictionnaire avec les IDs comme clés et les noms comme valeurs
-
-print(class_names)
+class_names = model.names
+# Cela donne un dictionnaire avec les IDs comme clés et les noms comme valeurs
+# print(class_names)
 
 # Créez un objet VideoCapture
 cap = cv2.VideoCapture(rtsp_url)
 
-tracker = DeepSort(max_age=50)
+tracker = DeepSort(max_age=20)
 
 # Vérifiez si la connexion est ouverte
 if not cap.isOpened():
@@ -51,14 +51,12 @@ while cap.isOpened():
         print("Erreur : Impossible de lire le flux vidéo")
         break
 
-    detected = False
+    #    detected = False
 
     # Effectuer la détection sur l'image
     detections = model(frame)[0]
 
     results = []
-
-    #    person_detected = False  # Indicateur pour la détection de personnes
 
     # Filtrer uniquement les personnes (class_id = 0 pour la classe 'person' dans les modèles YOLO)
     for data in detections.boxes.data.tolist():
@@ -66,16 +64,15 @@ while cap.isOpened():
         confidence = data[4]
 
         # Récupérez l'id du nom de la classe
-        class_id = int(data[5])
+        # class_id = int(data[5])
 
         # Supprimer les détections en dessous du seuil CONFIDENCE_THRESHOLD
         if float(confidence) < CONFIDENCE_THRESHOLD:
             continue
 
-        if class_id == EXCLUDED_CLASS_ID:
-            continue
-        # Détection que de la classe personne
-        # if class_id != 0:  # 0 correspond à la classe 'person'
+        # if class_id == EXCLUDED_CLASS_ID:
+        # continue
+
         # Récupérer les coordonnées de la boîte englobante
         xmin, ymin, xmax, ymax = int(data[0]), int(data[1]), int(data[2]), int(data[3])
         class_id = int(data[5])
@@ -83,9 +80,6 @@ while cap.isOpened():
         # Dessiner la boîte englobante et l'étiquette
         # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         # cv2.putText(frame, 'Person', (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-        # Définir que la personne est détectée
-        # person_detected = True
 
         # ajouter le cadre de délimitation (x, y, l, h), la confiance et l'identifiant de classe à la liste des
         # résultats
@@ -108,8 +102,8 @@ while cap.isOpened():
         class_name = class_names[class_id]  # Get the class name from the class ID
 
         # Jouer un son si la classe "violence" est détectée
-        if class_name.lower() != "NonViolence":
-            detected = True
+        # if class_name.lower() != "NonViolence":
+        # detected = True
         # pygame.mixer.music.play()
 
         # draw the bounding box and the track id
@@ -123,10 +117,10 @@ while cap.isOpened():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  #
 
     if ret:
-        pygame.mixer.music.play()
+        #  pygame.mixer.music.play()
         recording, out = Recording.enregistrer_video(frame, dossier_create, recording, out)
     elif recording:
-        pygame.mixer.stop()
+        #  pygame.mixer.stop()
         recording = False
         out.release()
         print("Fin de l'enregistrement")
