@@ -8,7 +8,7 @@ import Recording
 # Charger le modèle YOLOv8
 model = YOLO('best_5.pt')
 
-CONFIDENCE_THRESHOLD = 0.5  # Le seuil de détection
+CONFIDENCE_THRESHOLD = 0.6  # Le seuil de détection
 # EXCLUDED_CLASS_ID = 3
 # L'exclusion de la classe 3 qui détecte de personne non violente
 
@@ -57,6 +57,8 @@ while cap.isOpened():
 
     results = []
 
+    detected = False  # Initialiser la variable de détection
+
     for data in detections.boxes.data.tolist():
         # La probabilité de chaque détection
         confidence = data[4]
@@ -85,6 +87,8 @@ while cap.isOpened():
         if not track.is_confirmed():
             continue
 
+        detected = True  # Activer le flag si une détection est confirmée
+
         track_id = track.track_id
         ltrb = track.to_ltrb()
 
@@ -108,25 +112,14 @@ while cap.isOpened():
         cv2.putText(frame, str(track_id), (xmin + 5, ymin - 8),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  #
 
-    if ret:
-        #  pygame.mixer.music.play()
+    if detected:
+        pygame.mixer.music.play()
         recording, out = Recording.enregistrer_video(frame, dossier_create, recording, out)
     elif recording:
-        #  pygame.mixer.stop()
+        pygame.mixer.stop()
         recording = False
         out.release()
         print("Fin de l'enregistrement")
-
-    """
-    if person_detected:
-        sound.play()
-        recording, out = Recording.enregistrer_video(frame, dossier_create, recording, out)
-    elif recording:  # Arrêter l'enregistrement si aucune personne n'est détectée
-        pygame.mixer.stop() # Arret du son
-        recording = False
-        out.release()
-        print("Enregistrement arrêté")
-    """
 
     # Redimensionner l'image (par exemple, à 50% de la taille originale)
     scale_percent = 50  # Pourcentage de redimensionnement
