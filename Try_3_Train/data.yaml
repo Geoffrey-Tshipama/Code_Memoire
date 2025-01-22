@@ -1,6 +1,6 @@
-train: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence Dectection.v1i.yolov8\train\images
-val: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence Dectection.v1i.yolov8\valid\images
-test: C:\Users\Fablabpolytech\PycharmProjects\Code_GTM\Memoire\Try_3_Train\Violence Dectection.v1i.yolov8\test\images
+train: ...\train\images
+val: ...\valid\images
+test: ...\test\images
 
 nc: 4
 names: ['Guns', 'Knife', 'NonViolence', 'Violence']

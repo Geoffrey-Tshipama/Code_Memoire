@@ -1,18 +1,25 @@
 """
-But : Nous allons entrainer notre modèle YOLOv8 et exporter ce modèle
+But : Nous allons entrainer notre modèle YOLOv8s et exporter ce modèle pour faire l'inférence.
 
-Évaluation 1 : training avec un dataset contenant des images de guns, ketch...
+Évaluation : training avec un dataset contenant des images de Guns, Non_Violence, Violence, Knife.
+             Ce code génère un ensemble des dossiers utiles qui servent à suivre et évaluer le
+             modèle pour voir les performances de ce dernier.
 
-Evalution -1 : Nous voici presque à la fin de notre programme, maintenant, nous entrainons notre modèle
-                avec un dataset qu'on a rassemblé nous meme en prenant certains données au sain de la faculté
-                polytechnique.
+             Pour mieux comprendre, nous pouvons définir quelques hyper-paramètres présentés :
+             - cache = true : permet de mettre les élements du dataset dans la RAM pour éviter
+                              d'aller chercher les images à chaque fois dans le disque dur.
+             - batch = -1 : choisi de manière automatique les nombres d'éléments du dataset à
+                            traiter de manière continue avant d'appliquer une retro-progression
+                            sur l'ensemble du modèle.
+             - lr = 0.0001 : est le taux d'apprentissage appliqué lors de l'apprentissage du modèle
+                             pour réduire l'erreur, la fonction de perte.
 
 """
 
 from ultralytics import YOLO
 import os
 
-if __name__ == '__m   ain__':
+if __name__ == '__main__':
     model = YOLO("yolov8s.pt")
 
     # Resume training
